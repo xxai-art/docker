@@ -17,6 +17,7 @@ services:
       - ${QDRANT__SERVICE__HTTP_PORT}:${QDRANT__SERVICE__HTTP_PORT}
 
   gdb-ui:
+    container_name: art-gdb-ui
     image: 'greptime/greptimedb-dashboard:latest'
     ports:
       - '8082:8080'
