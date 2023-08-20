@@ -2,14 +2,47 @@ version: '3'
 
 services:
   mq:
+    container_name: art-mq
+    image:  redis
+    restart: always
+    environment:
+      REDIS_ARGS: >
+        --aclfile /data/acl
+        --port ${MQ_PORT}
+        --appendonly yes
+        --bind 0.0.0.0
+        --save 64 1 --save 32 8 --save 2 32768
+        --repl-backlog-size 256m
+      REDIS_DATA_DIR: /data
+    volumes:
+      - ./data/mq:/data
+    ports:
+      - ${MQ_PORT}:${MQ_PORT}
 
   gdb:
+    container_name: art-gdb
+    image: greptime/greptimedb:v0.4.0-nightly-20230814
+    # image: greptime/greptimedb
+    ports:
+      - 4000-4005:4000-4005
+    command: >
+      standalone start
+      --http-addr 0.0.0.0:4000
+      --rpc-addr 0.0.0.0:4001
+      --mysql-addr 0.0.0.0:4002
+      --postgres-addr 0.0.0.0:4003
+      --prom-addr 0.0.0.0:4004
+      --opentsdb-addr 0.0.0.0:4005
+      --user-provider=static_user_provider:file:/user.ini
+    volumes:
+      - ./data/gdb:/tmp/greptimedb
+      - ./gdb/user.ini:/user.ini
 
   kv:
     restart: always
     container_name: art-kv
     build:
-      context: ../Dockerfile/kvrocks
+      context: ../docker/kvrocks
       dockerfile: Dockerfile
     # mem_limit: 1G
     environment:
@@ -28,4 +61,3 @@ services:
       - ./log/kv:/log
     ports:
       - ${KV_PORT}:${KV_PORT}
-

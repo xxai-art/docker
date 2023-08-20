@@ -2,12 +2,46 @@ version: '3'
 
 services:
   apg: # 分析用的pg ( analysis postgresql )
+    container_name: art-xpg
+    image: xxai/postgres
+    volumes:
+      - ./data/apg:/var/lib/postgresql/data
+      - ./log/apg:/log
+    restart: always
+    environment:
+      POSTGRES_DB: ${APG_DB}
+      POSTGRES_PASSWORD: ${APG_PASSWORD}
+      POSTGRES_USER: ${APG_USER}
+      PGPORT: ${APG_PORT}
+    ports:
+      - ${APG_PORT}:${APG_PORT}
+    command: >
+      postgres
+      -c archive_mode=on
+      -c autovacuum=on
+      -c checkpoint_completion_target=0.9
+      -c default_toast_compression=lz4
+      -c effective_io_concurrency=256
+      -c log_timezone=PRC
+      -c logging_collector=on
+      -c maintenance_work_mem=512MB
+      -c max_connections=128
+      -c max_parallel_workers=8
+      -c max_wal_senders=3
+      -c max_wal_size=8GB
+      -c max_worker_processes=8
+      -c min_wal_size=80MB
+      -c random_page_cost=1.1
+      -c shared_buffers=2GB -c effective_cache_size=8GB
+      -c synchronous_commit=off
+      -c wal_compression=zstd
+      -c wal_level=logical
 
   bk: # 后台用的background kv
     restart: always
     container_name: art-bk
     build:
-      context: ../Dockerfile/kvrocks
+      context: ../docker/kvrocks
       dockerfile: Dockerfile
     # mem_limit: 1G
     environment:
