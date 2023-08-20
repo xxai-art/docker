@@ -1,7 +1,7 @@
-cache/
-node_modules/
-data/
-log/
 /docker/postgres/plugin/md5hash/
 /docker/postgres/plugin/moreint/
-
+backup/
+cache/
+data/
+log/
+node_modules/
