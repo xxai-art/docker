@@ -3,7 +3,7 @@ version: '3'
 services:
   mq:
     container_name: art-mq
-    image:  redis
+    image:  redis:7.2.0-alpine3.18
     restart: always
     environment:
       REDIS_ARGS: >
