@@ -9,7 +9,7 @@ services:
     build:
       context: ../Dockerfile/kvrocks
       dockerfile: Dockerfile
-    mem_limit: 1G
+    # mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
         --port ${BK_PORT}
