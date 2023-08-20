@@ -127,7 +127,7 @@ services:
 # -c shared_preload_libraries='pg_cron'
   bk: # 后台用的background kv
     restart: always
-    container_name: art-bv
+    container_name: art-bk
     build:
       context: ../docker/kvrocks
       dockerfile: Dockerfile

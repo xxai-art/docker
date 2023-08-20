@@ -1,3 +1,8 @@
+version: '3'
+
+services:
+  apg: # 分析用的pg ( analysis postgresql )
+
   bk: # 后台用的background kv
     restart: always
     container_name: art-bk

@@ -1,6 +1,10 @@
 version: '3'
 
 services:
+  redis:
+
+  pg:
+
   clip-qdrant:
     container_name: clip-qdrant
     image:  qdrant/qdrant
