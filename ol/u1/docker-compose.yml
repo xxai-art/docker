@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  kv:
+    restart: always
+    container_name: art-kv
+    build:
+      context: ../Dockerfile/kvrocks
+      dockerfile: Dockerfile
+    # mem_limit: 1G
+    environment:
+      KVROCKS_ARGS: |
+        --port ${KV_PORT}
+        --requirepass ${KV_PASSWORD}
+        --workers ${KV_WORKERS}
+        --log /log
+        --dir /data
+        --timeout 360
+        --rocksdb.compression zstd
+        --rocksdb.enable_blob_files yes
+        --rocksdb.read_options.async_io yes
+    volumes:
+      - ./data/kv:/data
+      - ./log/kv:/log
+    ports:
+      - ${KV_PORT}:${KV_PORT}
+

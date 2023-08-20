@@ -1,0 +1,173 @@
+version: '3'
+
+services:
+  clip-qdrant:
+    container_name: clip-qdrant
+    image:  qdrant/qdrant
+    restart: always
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: ${QDRANT__SERVICE__HTTP_PORT}
+      QDRANT__SERVICE__GRPC_PORT: ${QDRANT__SERVICE__GRPC_PORT}
+      QDRANT__SERVICE__API_KEY: ${QDRANT__SERVICE__API_KEY}
+    volumes:
+      - ./data/qdrant/storage:/qdrant/storage
+      - ./data/qdrant/snapshots:/qdrant/snapshots
+    ports:
+      - ${QDRANT__SERVICE__GRPC_PORT}:${QDRANT__SERVICE__GRPC_PORT}
+      - ${QDRANT__SERVICE__HTTP_PORT}:${QDRANT__SERVICE__HTTP_PORT}
+
+  gdb-ui:
+    image: 'greptime/greptimedb-dashboard:latest'
+    ports:
+      - '8082:8080'
+    environment:
+      - GREPTIMEDB_HTTP_HOST=gdb
+
+  gdb:
+    container_name: art-gdb
+    image: greptime/greptimedb:v0.4.0-nightly-20230814
+    # image: greptime/greptimedb
+    ports:
+      - 4000-4005:4000-4005
+    command: >
+      standalone start
+      --http-addr 0.0.0.0:4000
+      --rpc-addr 0.0.0.0:4001
+      --mysql-addr 0.0.0.0:4002
+      --postgres-addr 0.0.0.0:4003
+      --prom-addr 0.0.0.0:4004
+      --opentsdb-addr 0.0.0.0:4005
+      --user-provider=static_user_provider:file:/user.ini
+    volumes:
+      - ./data/gdb:/tmp/greptimedb
+      - ./gdb/user.ini:/user.ini
+  nginx:
+    container_name: art-nginx
+    image:  wactax/nginx
+    restart: always
+    volumes:
+      - /:/www
+      - ./log/nginx:/var/log/nginx
+      - ./nginx:/etc/nginx
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+  redis:
+    container_name: art-redis
+    image:  redis/redis-stack-server:7.2.0-v0
+    restart: always
+    environment:
+      REDIS_ARGS: >
+        --aclfile /data/acl
+        --port ${REDIS_PORT}
+        --appendonly yes
+        --bind 0.0.0.0
+        --save 64 1 --save 32 8 --save 2 32768
+        --repl-backlog-size 256m
+      REDIS_DATA_DIR: /data
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+  dfly:
+    container_name: art-dfly
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    restart: always
+    ulimits:
+      memlock: -1
+    ports:
+      - ${DFLY_PORT}:${DFLY_PORT}
+    volumes:
+      - ./cache/dfly:/data
+    command: >
+      -dbnum 1
+      -hz ${DFLY_HZ}
+      --cache_mode=true
+      --save_schedule "*:30"
+      --port ${DFLY_PORT}
+      --requirepass ${DFLY_PASSWORD}
+      --keys_output_limit=8192
+      --proactor_threads=${DFLY_THREADS}
+      --maxmemory=${DFLY_MAXMEMORY}
+  pg:
+    container_name: art-pg
+    image: xxai/postgres
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
+      - ./backup/pg:/backup/pg
+      - ./log/pgbackrest:/var/log/pgbackrest
+      - ./log/pg:/log
+      - ./conf/pgbackrest:/etc/pgbackrest
+    restart: always
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: ${PG_USER}
+      PGPORT: ${PG_PORT}
+    ports:
+      - ${PG_PORT}:${PG_PORT}
+    command: >
+      postgres
+      -c max_wal_senders=3 -c log_timezone=PRC
+      -c min_wal_size=80MB -c archive_mode=on -c max_wal_size=8GB
+      -c max_worker_processes=10 -c max_parallel_workers=10 -c max_connections=128
+      -c effective_io_concurrency=256 -c random_page_cost=1.1
+      -c maintenance_work_mem=128MB
+      -c checkpoint_completion_target=0.9
+      -c shared_buffers=512MB -c effective_cache_size=1536MB
+      -c logging_collector=on -c wal_compression=zstd
+      -c default_toast_compression=lz4 -c wal_level=logical
+      -c synchronous_commit=off
+# -c cron.use_background_workers=off
+# -c cron.timezone='UTC+8'
+# -c cron.database_name=$PG_DB
+# -c shared_preload_libraries='pg_cron'
+  bk: # 后台用的background kv
+    restart: always
+    container_name: art-bv
+    build:
+      context: ../docker/kvrocks
+      dockerfile: Dockerfile
+    mem_limit: 1G
+    environment:
+      KVROCKS_ARGS: |
+        --port ${BK_PORT}
+        --requirepass ${BK_PASSWORD}
+        --workers ${BK_WORKERS}
+        --log /log
+        --dir /data
+        --timeout 360
+        --rocksdb.compression zstd
+        --rocksdb.enable_blob_files yes
+        --rocksdb.read_options.async_io yes
+    volumes:
+      - ./data/bk:/data
+      - ./log/bk:/log
+    ports:
+      - ${BK_PORT}:${BK_PORT}
+  kv:
+    restart: always
+    container_name: art-kv
+    build:
+      context: ../docker/kvrocks
+      dockerfile: Dockerfile
+    mem_limit: 1G
+    environment:
+      KVROCKS_ARGS: |
+        --port ${KV_PORT}
+        --requirepass ${KV_PASSWORD}
+        --workers ${KV_WORKERS}
+        --log /log
+        --dir /data
+        --timeout 360
+        --rocksdb.compression zstd
+        --rocksdb.enable_blob_files yes
+        --rocksdb.read_options.async_io yes
+    volumes:
+      - ./data/kv:/data
+      - ./log/kv:/log
+    ports:
+      - ${KV_PORT}:${KV_PORT}
+

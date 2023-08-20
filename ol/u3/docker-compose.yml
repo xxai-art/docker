@@ -1,0 +1,23 @@
+  bk: # 后台用的background kv
+    restart: always
+    container_name: art-bk
+    build:
+      context: ../Dockerfile/kvrocks
+      dockerfile: Dockerfile
+    mem_limit: 1G
+    environment:
+      KVROCKS_ARGS: |
+        --port ${BK_PORT}
+        --requirepass ${BK_PASSWORD}
+        --workers ${BK_WORKERS}
+        --log /log
+        --dir /data
+        --timeout 360
+        --rocksdb.compression zstd
+        --rocksdb.enable_blob_files yes
+        --rocksdb.read_options.async_io yes
+    volumes:
+      - ./data/bk:/data
+      - ./log/bk:/log
+    ports:
+      - ${BK_PORT}:${BK_PORT}

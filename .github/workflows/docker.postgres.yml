@@ -1,0 +1,45 @@
+name: Build PostgreSQL Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker/postgres/**'
+      - '.github/workflows/docker.postgres.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - uses: docker/setup-qemu-action@v2
+    - uses: docker/setup-buildx-action@v2
+
+    - uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: today
+      run: echo "today=$(date +%Y%m%d)" >> $GITHUB_ENV
+
+    - run: ./docker/postgres/init.sh
+
+    - uses: docker/build-push-action@v4
+      with:
+        push: true
+        context: docker/postgres
+        file: docker/postgres/Dockerfile
+        platforms: linux/amd64,linux/arm64
+        tags: |
+          xxai/postgres:${{ env.today }}
+          xxai/postgres:latest
+      
+
+
