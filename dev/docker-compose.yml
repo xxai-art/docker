@@ -126,18 +126,18 @@ services:
 # -c cron.timezone='UTC+8'
 # -c cron.database_name=$PG_DB
 # -c shared_preload_libraries='pg_cron'
-  bk: # 后台用的background kv
+  ak: # 后台用的分析用的 kv
     restart: always
-    container_name: art-bk
+    container_name: art-ak
     build:
       context: ../docker/kvrocks
       dockerfile: Dockerfile
     mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
-        --port ${BK_PORT}
-        --requirepass ${BK_PASSWORD}
-        --workers ${BK_WORKERS}
+        --port ${AK_PORT}
+        --requirepass ${AK_PASSWORD}
+        --workers ${AK_WORKERS}
         --log /log
         --dir /data
         --timeout 360
@@ -145,10 +145,10 @@ services:
         --rocksdb.enable_blob_files yes
         --rocksdb.read_options.async_io yes
     volumes:
-      - ./data/bk:/data
-      - ./log/bk:/log
+      - ./data/ak:/data
+      - ./log/ak:/log
     ports:
-      - ${BK_PORT}:${BK_PORT}
+      - ${AK_PORT}:${AK_PORT}
   kv:
     restart: always
     container_name: art-kv

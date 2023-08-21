@@ -1,6 +1,30 @@
 version: '3'
 
 services:
+  jk: # juicefs kvrocks
+    restart: always
+    container_name: art-jk
+    build:
+      context: ../docker/kvrocks
+      dockerfile: Dockerfile
+    # mem_limit: 1G
+    environment:
+      KVROCKS_ARGS: |
+        --port ${JK_PORT}
+        --requirepass ${JK_PASSWORD}
+        --workers ${JK_WORKERS}
+        --log /log
+        --dir /data
+        --timeout 360
+        --rocksdb.compression zstd
+        --rocksdb.enable_blob_files yes
+        --rocksdb.read_options.async_io yes
+    volumes:
+      - ./data/jk:/data
+      - ./log/jk:/log
+    ports:
+      - ${JK_PORT}:${JK_PORT}
+
   redis:
     container_name: art-redis
     image:  redis/redis-stack-server:7.2.0-v0
