@@ -32,16 +32,17 @@ services:
       - 4000-4005:4000-4005
     command: >
       standalone start
+      -c /gdb/gdb.ini
       --http-addr 0.0.0.0:4000
-      --rpc-addr 0.0.0.0:4001
-      --mysql-addr 0.0.0.0:4002
       --postgres-addr 0.0.0.0:4003
-      --prom-addr 0.0.0.0:4004
-      --opentsdb-addr 0.0.0.0:4005
-      --user-provider=static_user_provider:file:/user.ini
+      --user-provider=static_user_provider:file:/gdb/user.ini
+# --prom-addr 0.0.0.0:4004
+# --opentsdb-addr 0.0.0.0:4005
+# --rpc-addr 0.0.0.0:4001
+# --mysql-addr 0.0.0.0:4002
     volumes:
-      - ./data/gdb:/tmp/greptimedb
-      - ./gdb/user.ini:/user.ini
+      - ./data/gdb:/data
+      - ./gdb/:/gdb
   nginx:
     container_name: art-nginx
     image:  wactax/nginx
