@@ -18,7 +18,7 @@ gen = (password,file)=>
 
   PREFIX = "user default on sanitize-payload "
   USER = PREFIX+"##{HASH} ~* &* +@all"
-  ACL = join ROOT,"data/redis#{file}/acl"
+  ACL = join ROOT,"data/#{file}/acl"
 
   li = []
 
@@ -42,5 +42,5 @@ gen = (password,file)=>
 ENV = join ROOT, 'env'
 
 
-gen env.REDIS_PASSWORD,''
-gen env.MQ_PASSWORD,'_mq'
+gen env.REDIS_PASSWORD,'redis'
+gen env.MQ_PASSWORD,'mq'

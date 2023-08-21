@@ -4,7 +4,7 @@ services:
 
   mq:
     container_name: art-mq
-    image:  redis:7.2.0-alpine3.18
+    image: redis/redis-stack-server:7.2.0-RC1
     restart: always
     environment:
       REDIS_ARGS: >
