@@ -11,6 +11,8 @@ ROOT = process.argv[2]
 {env} = process
 
 gen = (password,file)=>
+  if not password
+    return
   password = utf8e password.trim()
   HASH = (Buffer.from (await crypto.subtle.digest("SHA-256", password))).toString 'hex'
 
