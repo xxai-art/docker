@@ -27,8 +27,7 @@ juicefs format --storage s3 \
 # juicefs mount \
 #   --background \
 #   -o writeback_cache,allow_other \
-#   --storage s3 \
-#   --update-fstab --max-uploads=50 --writeback \
+#   --update-fstab --writeback \
 #   --cache-dir $CACHE \
 #   --cache-size 60240 \
 #   $REDIS \
