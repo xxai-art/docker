@@ -79,8 +79,8 @@ services:
       -c wal_compression=zstd
       -c wal_level=logical
 
-  clip-qdrant:
-    container_name: clip-qdrant
+  qdrant:
+    container_name: art-qdrant
     image:  qdrant/qdrant
     restart: always
     environment:
