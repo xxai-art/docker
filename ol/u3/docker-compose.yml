@@ -46,9 +46,9 @@ services:
     # mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
-        --port ${BK_PORT}
-        --requirepass ${BK_PASSWORD}
-        --workers ${BK_WORKERS}
+        --port ${AK_PORT}
+        --requirepass ${AK_PASSWORD}
+        --workers ${AK_WORKERS}
         --log /log
         --dir /data
         --timeout 360
@@ -59,4 +59,4 @@ services:
       - ./data/ak:/data
       - ./log/ak:/log
     ports:
-      - ${BK_PORT}:${BK_PORT}
+      - ${AK_PORT}:${AK_PORT}
