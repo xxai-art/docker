@@ -17,11 +17,19 @@ mkdir -p $MOUNT
 CACHE=/mnt/cache$MOUNT
 mkdir -p $CACHE
 
-juicefs mount \
-  --background \
-  -o writeback_cache,allow_other \
-  --update-fstab --max-uploads=50 --writeback \
-  --cache-dir $CACHE \
-  --cache-size 60240 \
+juicefs format --storage s3 \
+  --bucket $JUICEFS_S3_BUCKET \
+  --access-key $JUICEFS_S3_AK \
+  --secret-key $JUICEFS_S3_SK \
   $REDIS \
-  $MOUNT
+  art
+
+# juicefs mount \
+#   --background \
+#   -o writeback_cache,allow_other \
+#   --storage s3 \
+#   --update-fstab --max-uploads=50 --writeback \
+#   --cache-dir $CACHE \
+#   --cache-size 60240 \
+#   $REDIS \
+#   $MOUNT
