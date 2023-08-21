@@ -5,7 +5,7 @@ services:
     restart: always
     container_name: art-jk
     build:
-      context: ../docker/kvrocks
+      context: ../../docker/kvrocks
       dockerfile: Dockerfile
     # mem_limit: 1G
     environment:
