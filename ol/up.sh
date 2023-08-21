@@ -9,7 +9,8 @@ direnv allow
 name=xxai.art
 
 mkdir_ln() {
-  if [ ! -d "$1" ]; then
+  if [ ! -e "$1" ]; then
+    rm -rf $1
     fp=/$2/$1/$name
     mkdir -p $fp
     ln -s $fp $1
