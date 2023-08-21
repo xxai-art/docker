@@ -9,13 +9,19 @@ set -ex
 if ! [ -x "$(command -v juicefs)" ]; then
   curl -sSL https://d.juicefs.com/install | sh -
 fi
-set +o allexport
-source ../../conf/conn/jk.sh
-set -o allexport
-# juicefs format \
-#   --storage oss \
-#   --bucket https://myjfs.oss-cn-shanghai.aliyuncs.com \
-#   --access-key ABCDEFGHIJKLMNopqXYZ \
-#   --secret-key ZYXwvutsrqpoNMLkJiHgfeDCBA \
-#   redis://tom:mypassword@myjfs-sh-abc.redis.rds.aliyuncs.com:6379/0 \
-#   myjfs
+
+REDIS=redis://$JK_USER:$JK_PASSWORD@$JK_HOST_PORT/0
+
+MOUNT=/jfs
+mkdir -p $MOUNT
+CACHE=/mnt/cache$MOUNT
+mkdir -p $CACHE
+
+juicefs mount \
+  --background \
+  -o writeback_cache,allow_other \
+  --update-fstab --max-uploads=50 --writeback \
+  --cache-dir $CACHE \
+  --cache-size 60240 \
+  $REDIS \
+  $MOUNT
