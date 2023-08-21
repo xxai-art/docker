@@ -37,9 +37,9 @@ services:
       -c wal_compression=zstd
       -c wal_level=logical
 
-  bk: # 后台用的background kv
+  ak: # 后台用的 analysis kv
     restart: always
-    container_name: art-bk
+    container_name: art-ak
     build:
       context: ../../docker/kvrocks
       dockerfile: Dockerfile
@@ -56,7 +56,7 @@ services:
         --rocksdb.enable_blob_files yes
         --rocksdb.read_options.async_io yes
     volumes:
-      - ./data/bk:/data
-      - ./log/bk:/log
+      - ./data/ak:/data
+      - ./log/ak:/log
     ports:
       - ${BK_PORT}:${BK_PORT}
