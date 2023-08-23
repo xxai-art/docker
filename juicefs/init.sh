@@ -33,5 +33,6 @@ juicefs mount \
   --update-fstab --writeback \
   --cache-dir $CACHE \
   --cache-size 60240 \
+  --max-uploads=512 \
   $REDIS \
   $MOUNT
