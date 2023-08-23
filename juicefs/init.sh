@@ -30,10 +30,11 @@ mkdir -p $CACHE
 
 juicefs mount \
   --background \
-  -o writeback_cache,allow_other \
   --update-fstab --writeback \
   --cache-dir $CACHE \
   --cache-size 60240 \
   --max-uploads=512 \
   $REDIS \
   $MOUNT
+
+# -o writeback_cache,allow_other \
