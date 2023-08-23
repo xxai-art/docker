@@ -12,12 +12,12 @@ fi
 
 REDIS=redis://$JK_USER:$JK_PASSWORD@$JK_HOST_PORT/0
 
-juicefs format --storage s3 \
+juicefs format --compress --storage s3 \
   --bucket $JUICEFS_S3_BUCKET \
   --access-key $JUICEFS_S3_AK \
   --secret-key $JUICEFS_S3_SK \
   $REDIS \
-  art
+  art-fs
 
 MOUNT=/jfs
 mkdir -p $MOUNT
