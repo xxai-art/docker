@@ -22,16 +22,16 @@ juicefs format \
   $REDIS \
   art-fs
 
-# MOUNT=/jfs
-# mkdir -p $MOUNT
-# CACHE=/mnt/cache$MOUNT
-# mkdir -p $CACHE
-#
-# juicefs mount \
-#   --background \
-#   -o writeback_cache,allow_other \
-#   --update-fstab --writeback \
-#   --cache-dir $CACHE \
-#   --cache-size 60240 \
-#   $REDIS \
-#   $MOUNT
+MOUNT=/jfs
+mkdir -p $MOUNT
+CACHE=/mnt/cache$MOUNT
+mkdir -p $CACHE
+
+juicefs mount \
+  --background \
+  -o writeback_cache,allow_other \
+  --update-fstab --writeback \
+  --cache-dir $CACHE \
+  --cache-size 60240 \
+  $REDIS \
+  $MOUNT
