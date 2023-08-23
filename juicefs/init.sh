@@ -18,9 +18,10 @@ juicefs format \
   --access-key $JUICEFS_S3_AK \
   --secret-key $JUICEFS_S3_SK \
   --compress=zstd \
-  --trash-days=1 \
   $REDIS \
   art-fs
+
+juicefs config $REDIS --trash-days 31
 
 MOUNT=/jfs
 mkdir -p $MOUNT
