@@ -36,5 +36,7 @@ if ! [ -x "$(command -v acl)" ]; then
 fi
 
 for d in "${dirs[@]}"; do
-  setfacl -m u:$USER_NAME:rwx "$d"
+  if [ -d "$d" ]; then
+    setfacl -m u:$USER_NAME:rwx "$d"
+  fi
 done
