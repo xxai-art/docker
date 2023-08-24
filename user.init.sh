@@ -6,8 +6,8 @@ set -ex
 
 [ "$UID" -eq 0 ] || exec sudo "$0" "$@"
 
-USER_UID=3003
-USER_NAME=art
+USER_UID=5005
+USER_NAME=i
 groupadd -g $USER_UID $USER_NAME || groupmod -g $USER_UID $USER_NAME
 useradd -u $USER_UID -g $USER_NAME $USER_NAME || usermod -u $USER_UID $USER_NAME
 USER_HOME=/home/$USER_NAME
@@ -21,3 +21,9 @@ grep -P "^\s*$USER_NAME\s+" /etc/sudoers && { echo "$USER_NAME用户已经在sud
   echo "$USER_NAME ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers
   echo "已为$USER_NAME用户添加sudo权限，并设置为无需密码"
 }
+chsh -s $(which zsh) $USER_NAME
+dirs=(/etc/nginx /mnt /etc/supervisor/conf.d)
+
+for d in "${dirs[@]}"; do
+  setfacl -R -m u:$USER_NAME:rwx "$d"
+done
