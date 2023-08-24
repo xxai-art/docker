@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 
+USER_NAME=i
+
 DIR=$(realpath $0) && DIR=${DIR%/*}
 cd $DIR
 set -ex
 
 [ "$UID" -eq 0 ] || exec sudo "$0" "$@"
 
+USER_HOME=/home/$USER_NAME
+
+if [ ! -d "$USER_HOME" ]; then
+  btrfs subvolume create $USER_HOME
+fi
+
 USER_UID=5005
-USER_NAME=i
 groupadd -g $USER_UID $USER_NAME || groupmod -g $USER_UID $USER_NAME
 useradd -u $USER_UID -g $USER_NAME $USER_NAME || usermod -u $USER_UID $USER_NAME
-USER_HOME=/home/$USER_NAME
 mkdir -p $USER_HOME
 
 chown -R $USER_NAME:$USER_NAME $USER_HOME
