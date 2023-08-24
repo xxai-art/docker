@@ -31,6 +31,9 @@ grep -P "^\s*$USER_NAME\s+" /etc/sudoers && { echo "$USER_NAME用户已经在sud
 }
 chsh -s $(which zsh) $USER_NAME
 dirs=(/etc/nginx /mnt /etc/supervisor/conf.d)
+if ! [ -x "$(command -v acl)" ]; then
+  apt-get install -y acl
+fi
 
 for d in "${dirs[@]}"; do
   setfacl -m u:$USER_NAME:rwx "$d"
