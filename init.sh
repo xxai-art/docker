@@ -10,10 +10,12 @@ set -ex
 
 USER_HOME=/home/$USER_NAME
 
-if [ ! -d "$USER_HOME" ]; then
-  btrfs subvolume create $USER_HOME
-fi
-
+SUB=($USER_HOME /mnt/data)
+for i in "${SUB[@]}"; do
+  if [ ! -d "$i" ]; then
+    btrfs subvolume create $i
+  fi
+done
 USER_UID=5005
 groupadd -g $USER_UID $USER_NAME || groupmod -g $USER_UID $USER_NAME
 useradd -u $USER_UID -g $USER_NAME $USER_NAME || usermod -u $USER_UID $USER_NAME
