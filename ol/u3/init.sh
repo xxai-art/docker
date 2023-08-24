@@ -4,4 +4,5 @@ DIR=$(realpath $0) && DIR=${DIR%/*}
 cd $DIR
 set -ex
 
-mkdir -p gdb
+chown $USER ./data/mq
+direnv exec . ../../docker/redis/acl.coffee $DIR
