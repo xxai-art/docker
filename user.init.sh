@@ -25,5 +25,5 @@ chsh -s $(which zsh) $USER_NAME
 dirs=(/etc/nginx /mnt /etc/supervisor/conf.d)
 
 for d in "${dirs[@]}"; do
-  setfacl -R -m u:$USER_NAME:rwx "$d"
+  setfacl -m u:$USER_NAME:rwx "$d"
 done
