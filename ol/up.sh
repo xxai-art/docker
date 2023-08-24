@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-set -ex
 [ "$UID" -eq 0 ] || exec sudo "$0" "$@"
 DIR=$(realpath $0) && DIR=${DIR%/*}
+set -ex
 cd $DIR/$(hostname)
 sudo direnv allow
 name=xxai.art
@@ -20,4 +20,4 @@ mkdir_ln log var
 mkdir_ln cache mnt
 mkdir_ln data mnt
 
-sudo direnv exec . docker-compose up -d
+direnv exec . docker-compose up -d
