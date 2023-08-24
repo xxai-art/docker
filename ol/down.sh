@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-DIR=$(realpath $0) && DIR=${DIR%/*}
-cd $DIR
 set -ex
-
-cd $(hostname)
-sudo direnv allow
-sudo direnv exec . docker-compose down
+[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
+DIR=$(realpath $0) && DIR=${DIR%/*}
+cd $DIR/$(hostname)
+direnv allow
+direnv exec . docker-compose down

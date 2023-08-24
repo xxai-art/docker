@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-
-DIR=$(realpath $0) && DIR=${DIR%/*}
-cd $DIR
 set -ex
-
-cd $(hostname)
+[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
+DIR=$(realpath $0) && DIR=${DIR%/*}
+cd $DIR/$(hostname)
 sudo direnv allow
 name=xxai.art
 
