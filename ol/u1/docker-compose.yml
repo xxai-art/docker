@@ -2,24 +2,6 @@ version: '3'
 
 services:
 
-  mq:
-    container_name: art-mq
-    image: redis/redis-stack-server:7.2.0-v0
-    restart: always
-    environment:
-      REDIS_ARGS: >
-        --aclfile /data/acl
-        --port ${MQ_PORT}
-        --appendonly yes
-        --bind 0.0.0.0
-        --save 64 1 --save 32 8 --save 2 32768
-        --repl-backlog-size 256m
-      REDIS_DATA_DIR: /data
-    volumes:
-      - ./data/mq:/data
-    ports:
-      - ${MQ_PORT}:${MQ_PORT}
-
   kv:
     restart: always
     container_name: art-kv
