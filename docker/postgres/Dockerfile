@@ -5,7 +5,7 @@ FROM postgres:$PG_VERSION AS pg
 
 ENV DOCKER_PG_LLVM_DEPS="llvm15 clang15"
 
-#ENV PG_BACKREST_VERSION=2.45
+#ENV PG_BACKREST_VERSION=2.47
 
 RUN apk update && apk add curl
 
