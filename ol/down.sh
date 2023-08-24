@@ -5,5 +5,5 @@ cd $DIR
 set -ex
 
 cd $(hostname)
-direnv allow
-direnv exec . docker-compose down
+sudo direnv allow
+sudo direnv exec . docker-compose down

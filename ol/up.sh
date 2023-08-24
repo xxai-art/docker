@@ -5,7 +5,7 @@ cd $DIR
 set -ex
 
 cd $(hostname)
-direnv allow
+sudo direnv allow
 name=xxai.art
 
 mkdir_ln() {
@@ -22,4 +22,4 @@ mkdir_ln log var
 mkdir_ln cache mnt
 mkdir_ln data mnt
 
-direnv exec . docker-compose up -d
+sudo direnv exec . docker-compose up -d
