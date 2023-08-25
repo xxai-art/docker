@@ -28,7 +28,7 @@ services:
 
   # gdb:
   #   container_name: art-gdb
-  #   image: greptime/greptimedb:v0.4.0-nightly-20230814
+  #   image: greptime/greptimedb:v0.4.0-nightly-20230821
   #   # image: greptime/greptimedb
   #   ports:
   #     - 4000-4005:4000-4005
