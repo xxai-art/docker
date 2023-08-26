@@ -39,6 +39,7 @@ services:
         --repl-backlog-size 256m
       REDIS_DATA_DIR: /data
     volumes:
+      - ./redis.conf:/opt/redis-stack/etc/redis-stack.conf
       - ./data/redis:/data
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
