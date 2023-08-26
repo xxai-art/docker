@@ -28,7 +28,7 @@ services:
 
   gt:
     container_name: art-gt
-    image: greptime/greptimedb:v0.4.nightly-20230821
+    image: greptime/greptimedb:v0.4.0-nightly-20230821
     # image: greptime/greptimedb
     ports:
       - ${GT_HTTP_PORT}:${GT_HTTP_PORT}
@@ -36,6 +36,6 @@ services:
     command: >
       standalone start
     volumes:
-      - ./cache/gt:./cache/gt
+      - ./cache/gt:/cache
       - ./gt/user.ini:/user.ini
 
