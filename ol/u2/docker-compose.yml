@@ -33,9 +33,10 @@ services:
     #   REDIS_ARGS: >
     #   REDIS_DATA_DIR: /data
     command: >
+      /redis.conf
       --port ${REDIS_PORT}
     volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis.conf:/redis.conf
       - ./data/redis:/data
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
