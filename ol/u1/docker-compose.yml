@@ -34,7 +34,7 @@ services:
       - ${GT_HTTP_PORT}:${GT_HTTP_PORT}
       - ${GT_PG_PORT}:${GT_PG_PORT}
     command: >
-      standalone start
+      standalone start -c /gt/conf.toml
     volumes:
       - ./cache/gt:/cache
       - ./gt/user.ini:/user.ini
