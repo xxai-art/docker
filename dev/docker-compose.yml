@@ -135,7 +135,6 @@ services:
     mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
-        --port ${AK_PORT}
         --requirepass ${AK_PASSWORD}
         --workers ${AK_WORKERS}
         --log /log
@@ -144,12 +143,11 @@ services:
         --rocksdb.compression zstd
         --rocksdb.enable_blob_files yes
         --rocksdb.read_options.async_io yes
-        --rename-command flushdb abcdef
     volumes:
       - ./data/ak:/data
       - ./log/ak:/log
     ports:
-      - ${AK_PORT}:${AK_PORT}
+      - ${AK_PORT}:6666
   kv:
     restart: always
     container_name: art-kv
@@ -159,7 +157,6 @@ services:
     mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
-        --port ${KV_PORT}
         --requirepass ${KV_PASSWORD}
         --workers ${KV_WORKERS}
         --log /log
@@ -172,5 +169,5 @@ services:
       - ./data/kv:/data
       - ./log/kv:/log
     ports:
-      - ${KV_PORT}:${KV_PORT}
+      - ${KV_PORT}:6666
 

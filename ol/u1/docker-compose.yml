@@ -11,7 +11,6 @@ services:
     # mem_limit: 1G
     environment:
       KVROCKS_ARGS: |
-        --port ${KV_PORT}
         --requirepass ${KV_PASSWORD}
         --workers ${KV_WORKERS}
         --log /log
@@ -24,7 +23,7 @@ services:
       - ./data/kv:/data
       - ./log/kv:/log
     ports:
-      - ${KV_PORT}:${KV_PORT}
+      - ${KV_PORT}:6666
 
   gt:
     container_name: art-gt
