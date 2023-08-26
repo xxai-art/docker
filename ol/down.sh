@@ -9,5 +9,5 @@ if [ -z "$1" ]; then
   direnv exec . docker-compose down
 else
   direnv exec . docker-compose stop $1
-  direnv exec . docker-compose rm $1
+  yes | direnv exec . docker-compose rm $1
 fi

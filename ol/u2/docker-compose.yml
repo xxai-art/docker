@@ -27,7 +27,7 @@ services:
   #
   redis:
     container_name: art-redis
-    image:  redis/redis-stack-server:7.2.0-v0
+    image:  redis:7.2.0-alpine
     restart: always
     environment:
       REDIS_ARGS: >
@@ -39,7 +39,7 @@ services:
         --repl-backlog-size 256m
       REDIS_DATA_DIR: /data
     volumes:
-      - ./redis.conf:/redis-stack.conf
+      # - ./redis.conf:/redis-stack.conf
       - ./data/redis:/data
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
