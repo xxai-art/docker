@@ -29,17 +29,18 @@ services:
     container_name: art-redis
     image:  redis/redis-stack-server:7.2.0-v0
     restart: always
-    environment:
-      REDIS_ARGS: >
-        --aclfile /data/acl
-        --port ${REDIS_PORT}
-        --appendonly yes
-        --bind 0.0.0.0
-        --save 64 1 --save 32 8 --save 2 32768
-        --repl-backlog-size 256m
-      REDIS_DATA_DIR: /data
+    # environment:
+    #   REDIS_ARGS: >
+    #   REDIS_DATA_DIR: /data
+    command: >
+      --aclfile /data/acl
+      --port ${REDIS_PORT}
+      --appendonly yes
+      --bind 0.0.0.0
+      --save 64 1 --save 32 8 --save 2 32768
+      --repl-backlog-size 256m
     volumes:
-      - ./redis.conf:/opt/redis-stack/etc/redis-stack.conf
+      # - ./redis.conf:/opt/redis-stack/etc/redis-stack.conf
       - ./data/redis:/data
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
