@@ -27,7 +27,7 @@ services:
   #
   redis:
     container_name: art-redis
-    image:  redis:7.2.0-alpine
+    image:  redis:7.2.0
     restart: always
     # environment:
     #   REDIS_ARGS: >
