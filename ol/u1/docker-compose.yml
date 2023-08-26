@@ -28,13 +28,14 @@ services:
 
   gt:
     container_name: art-gt
-    image: greptime/greptimedb:v0.4.0-nightly-20230821
+    image: greptime/greptimedb:v0.4.nightly-20230821
     # image: greptime/greptimedb
     ports:
-      - 4000-4005:4000-4005
+      - ${GT_HTTP_PORT}:${GT_HTTP_PORT}
+      - ${GT_PG_PORT}:${GT_PG_PORT}
     command: >
       standalone start
     volumes:
-      - ./cache/gdb:./cache/gdb
-      - ./gdb/user.ini:/user.ini
+      - ./cache/gt:./cache/gt
+      - ./gt/user.ini:/user.ini
 
