@@ -37,5 +37,5 @@ services:
       standalone start -c /gt/conf.toml
     volumes:
       - ./cache/gt:/cache
-      - ./gt/user.ini:/user.ini
+      - ./gt:/gt
 
