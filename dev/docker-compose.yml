@@ -16,33 +16,33 @@ services:
       - ${QDRANT__SERVICE__GRPC_PORT}:${QDRANT__SERVICE__GRPC_PORT}
       - ${QDRANT__SERVICE__HTTP_PORT}:${QDRANT__SERVICE__HTTP_PORT}
 
-  gdb-ui:
-    container_name: art-gdb-ui
+  gt-ui:
+    container_name: art-gt-ui
     image: 'greptime/greptimedb-dashboard:latest'
     ports:
       - '8082:8080'
     environment:
-      - GREPTIMEDB_HTTP_HOST=gdb
+      - GREPTIMEDB_HTTP_HOST=gt
 
-  gdb:
-    container_name: art-gdb
+  gt:
+    container_name: art-gt
     image: greptime/greptimedb:v0.4.0-nightly-20230814
     # image: greptime/greptimedb
     ports:
       - 4000-4005:4000-4005
     command: >
       standalone start
-      -c /gdb/gdb.ini
+      -c /gt/gt.ini
       --http-addr 0.0.0.0:4000
       --postgres-addr 0.0.0.0:4003
-      --user-provider=static_user_provider:file:/gdb/user.ini
+      --user-provider=static_user_provider:file:/gt/user.ini
 # --prom-addr 0.0.0.0:4004
 # --opentsdb-addr 0.0.0.0:4005
 # --rpc-addr 0.0.0.0:4001
 # --mysql-addr 0.0.0.0:4002
     volumes:
-      - ./data/gdb:/data
-      - ./gdb/:/gdb
+      - ./data/gt:/data
+      - ./gt/:/gt
   nginx:
     container_name: art-nginx
     image:  wactax/nginx
