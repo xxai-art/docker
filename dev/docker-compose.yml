@@ -129,11 +129,10 @@ services:
     restart: always
     container_name: art-ak
     build:
-      context: ../docker/kvrocks
+      context: apache/kvrocks
       dockerfile: Dockerfile
     mem_limit: 1G
-    environment:
-      KVROCKS_ARGS: |
+    command: >
         --requirepass ${AK_PASSWORD}
         --workers ${AK_WORKERS}
         --log /log
