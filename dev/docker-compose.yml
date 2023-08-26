@@ -80,7 +80,7 @@ services:
     ulimits:
       memlock: -1
     ports:
-      - ${DFLY_PORT}:${DFLY_PORT}
+      - ${DFLY_PORT}:6379
     volumes:
       - ./cache/dfly:/data
     command: >
@@ -88,7 +88,6 @@ services:
       -hz ${DFLY_HZ}
       --cache_mode=true
       --save_schedule "*:30"
-      --port ${DFLY_PORT}
       --requirepass ${DFLY_PASSWORD}
       --keys_output_limit=8192
       --proactor_threads=${DFLY_THREADS}
