@@ -5,4 +5,9 @@ DIR=$(realpath $0) && DIR=${DIR%/*}
 set -ex
 cd $DIR/$(hostname)
 direnv allow
-direnv exec . docker-compose down
+if [ -z "$1" ]; then
+  direnv exec . docker-compose down
+else
+  direnv exec . docker-compose stop $1
+  direnv exec . docker-compose rm $1
+fi
