@@ -5,20 +5,20 @@ services:
   kv:
     restart: always
     container_name: art-kv
-    build:
-      context: ../../docker/kvrocks
-      dockerfile: Dockerfile
-    # mem_limit: 1G
-    environment:
-      KVROCKS_ARGS: |
-        --requirepass ${KV_PASSWORD}
-        --workers ${KV_WORKERS}
-        --log /log
-        --dir /data
-        --timeout 360
-        --rocksdb.compression zstd
-        --rocksdb.enable_blob_files yes
-        --rocksdb.read_options.async_io yes
+    image: apache/kvrocks
+    command: >
+      --requirepass ${KV_PASSWORD}
+      --workers ${KV_WORKERS}
+      --log /log
+      --dir /data
+      --timeout 360
+      --rocksdb.compression zstd
+      --rocksdb.enable_blob_files yes
+      --rocksdb.read_options.async_io yes
+      --rename-command 'FLUSHDB ""'
+      --rename-command 'FLUSHALL ""'
+      --rename-command 'CONFIG ""'
+      --rename-command 'KEYS ""'
     volumes:
       - ./data/kv:/data
       - ./log/kv:/log

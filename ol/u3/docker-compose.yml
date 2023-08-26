@@ -54,12 +54,8 @@ services:
   ak: # 后台用的 analysis kv
     restart: always
     container_name: art-ak
-    build:
-      context: ../../docker/kvrocks
-      dockerfile: Dockerfile
-    # mem_limit: 1G
-    environment:
-      KVROCKS_ARGS: |
+    image: apache/kvrocks
+    command: >
         --requirepass ${AK_PASSWORD}
         --workers ${AK_WORKERS}
         --log /log
@@ -68,6 +64,10 @@ services:
         --rocksdb.compression zstd
         --rocksdb.enable_blob_files yes
         --rocksdb.read_options.async_io yes
+        --rename-command 'FLUSHDB ""'
+        --rename-command 'FLUSHALL ""'
+        --rename-command 'CONFIG ""'
+        --rename-command 'KEYS ""'
     volumes:
       - ./data/ak:/data
       - ./log/ak:/log
