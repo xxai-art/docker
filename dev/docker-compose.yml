@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  clip-qdrant:
-    container_name: clip-qdrant
+  qdrant:
+    container_name: art-qdrant
     image:  qdrant/qdrant
     restart: always
     environment:
