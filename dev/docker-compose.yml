@@ -55,6 +55,8 @@ services:
       - 80:80
       - 443:443
       - 443:443/udp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis:
     container_name: art-redis
     image:  redis/redis-stack-server:7.2.0-v0
