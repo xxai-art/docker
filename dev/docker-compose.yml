@@ -26,7 +26,7 @@ services:
 
   gt:
     container_name: art-gt
-    image: greptime/greptimedb:v0.4.0-nightly-20230814
+    image: greptime/greptimedb:v0.4.0-nightly-20230828
     # image: greptime/greptimedb
     ports:
       - 4000-4005:4000-4005
@@ -41,6 +41,7 @@ services:
 # --rpc-addr 0.0.0.0:4001
 # --mysql-addr 0.0.0.0:4002
     volumes:
+      - /tmp/backup/greptime:/tmp/backup/greptime
       - ./data/gt:/data
       - ./gt/:/gt
   nginx:
@@ -53,8 +54,11 @@ services:
       - ./nginx:/etc/nginx
     ports:
       - 80:80
+      - 8023:8023
       - 443:443
       - 443:443/udp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis:
     container_name: art-redis
     image:  redis/redis-stack-server:7.2.0-v0
