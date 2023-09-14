@@ -35,6 +35,7 @@ services:
     command: >
       standalone start -c /gt/conf.toml
     volumes:
+      - /tmp/backup/greptime:/tmp/backup/greptime
       - ./data/gt:/data
       - ./cache/gt:/cache
       - ./gt:/gt
