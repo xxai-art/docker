@@ -41,6 +41,7 @@ services:
 # --rpc-addr 0.0.0.0:4001
 # --mysql-addr 0.0.0.0:4002
     volumes:
+      - ./tmp/backup/greptime:/tmp/backup/greptime
       - ./data/gt:/data
       - ./gt/:/gt
   nginx:
