@@ -1,4 +1,4 @@
-ARG PG_VERSION=15-alpine
+ARG PG_VERSION=16-alpine
 # ARG PG_VERSION=16beta3-alpine
 
 FROM postgres:$PG_VERSION AS pg
@@ -23,8 +23,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 COPY plugin /plugin
 
-RUN /plugin/md5hash/build.sh
 RUN /plugin/moreint.sh
+RUN /plugin/md5hash/build.sh
 #RUN cd /plugin/pg_cron && make && make install
 
 # RUN cd /tmp &&\
@@ -39,6 +39,8 @@ RUN /plugin/moreint.sh
 #   cd /tmp/pgbackrest-release-$PG_BACKREST_VERSION/src && \
 #   ./configure --with-zstd && make && cp pgbackrest /usr/bin/ && \
 #   rm -r /tmp/pgbackrest-release-$PG_BACKREST_VERSION
+
+
 
 FROM postgres:$PG_VERSION
 
