@@ -153,18 +153,22 @@ services:
     container_name: art-kv
     mem_limit: 1G
     image: apache/kvrocks
-    command: >
-        --requirepass ${KV_PASSWORD}
-        --workers ${KV_WORKERS}
-        --log /log
-        --dir /data
-        --timeout 360
-        --rocksdb.compression zstd
-        --rocksdb.enable_blob_files yes
-        --rocksdb.read_options.async_io yes
     volumes:
       - ./data/kv:/data
       - ./log/kv:/log
     ports:
       - ${KV_PORT}:6666
+    entrypoint: >
+      kvrocks
+      -c /var/lib/kvrocks/kvrocks.conf
+      --bind "0.0.0.0"
+      --pidfile /var/run/kvrocks/kvrocks.pid
+      --requirepass ${KV_PASSWORD}
+      --workers ${KV_WORKERS}
+      --log /log
+      --dir /data
+      --timeout 360
+      --rocksdb.compression zstd
+      --rocksdb.enable_blob_files yes
+      --rocksdb.read_options.async_io yes
 
