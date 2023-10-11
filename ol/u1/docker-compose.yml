@@ -31,7 +31,7 @@ services:
 
   gt:
     container_name: art-gt
-    image: greptime/greptimedb:v0.4.0-nightly-20230925
+    image: greptime/greptimedb
     # image: greptime/greptimedb
     ports:
       - ${GT_HTTP_PORT}:${GT_HTTP_PORT}
